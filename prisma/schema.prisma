@@ -16,6 +16,6 @@ datasource db {
 model User {
   id String @id @default(uuid())
   nome String
-  telefone String
-  avaliacao Int
+  telefone String @unique
+  avaliacao Int?
 }
