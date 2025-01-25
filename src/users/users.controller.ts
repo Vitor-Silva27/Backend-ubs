@@ -22,31 +22,41 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.usersService.findAll();
   }
 
-  @Get('by-id/:id')
+  @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
 
   @Get('by-phone/:phone')
   async findByPhone(@Param('phone') phone: string) {
-    if (!phone) {
-      throw new HttpException('Phone number is required', HttpStatus.BAD_REQUEST);
+    const result = await this.usersService.findByPhone(phone);
+
+    if (result instanceof Error) {
+      throw new HttpException(
+        result.message,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    return this.usersService.findByPhone(phone);
+    return result;
   }
 
   @Get('by-name/:name')
   async findByName(@Param('name') name: string) {
-    if (!name) {
-      throw new HttpException('Name is required', HttpStatus.BAD_REQUEST);
+    const result = await this.usersService.findByName(name)
+
+    if (result instanceof Error) {
+      throw new HttpException(
+        result.message,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    return this.usersService.findByName(name);
+    return result;
   }
 
   @Patch('rating/:phone')
@@ -75,7 +85,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
 }

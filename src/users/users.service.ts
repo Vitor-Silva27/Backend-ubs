@@ -23,7 +23,7 @@ export class UsersService {
 
     return this.prisma.user.create({
       data: {
-        nome,
+        nome: nome.toLowerCase(),
         telefone
       }
     });
@@ -52,7 +52,7 @@ export class UsersService {
   async findByName(name: string) {
     return this.prisma.user.findFirst({
       where: {
-        nome: name
+        nome: name.toLowerCase()
       }
     });
   }
@@ -64,14 +64,22 @@ export class UsersService {
       },
       data: {
         avaliacao,
-        nome,
+        nome: nome?.toLowerCase(),
         telefone
       }
     });
   }
 
   async rating(telefone: string, rating: number) {
+    if(!telefone) {
+      return new Error("Número de telefone não fornecido!")
+    }
+
     const exists = await this.findByPhone(telefone);
+
+    if(!rating) {
+      return new Error("Avaliação inválida!");
+    }
 
     if(!exists) {
       return new Error("Número de telefone inválido!");
