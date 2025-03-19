@@ -8,9 +8,6 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create({nome, telefone}: CreateUserDto) {
-    if(!nome){
-      return new Error("Nome não fornecido!")
-    }
     if(!telefone) {
       return new Error("Número de telefone não fornecido!")
     }
@@ -23,7 +20,7 @@ export class UsersService {
 
     return this.prisma.user.create({
       data: {
-        nome: nome.toLowerCase(),
+        nome: nome?.toLowerCase(),
         telefone
       }
     });
