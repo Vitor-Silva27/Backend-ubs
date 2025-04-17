@@ -8,21 +8,21 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create({nome, telefone}: CreateUserDto) {
-    if(!telefone) {
-      return new Error("Número de telefone não fornecido!")
-    }
+    
+    if(telefone){
 
-    const exists = await this.findByPhone(telefone);
-
-    if(exists) {
-      return new Error("já existe um usuário com esse número de telefone");
+      const exists = await this.findByPhone(telefone);
+  
+      if(exists) {
+        return new Error("já existe um usuário com esse número de telefone");
+      }
     }
 
     return this.prisma.user.create({
       data: {
         nome: nome?.toLowerCase(),
-        telefone
-      }
+        telefone: telefone || null,
+      },
     });
   }
 
@@ -62,7 +62,7 @@ export class UsersService {
       data: {
         avaliacao,
         nome: nome?.toLowerCase(),
-        telefone
+        telefone: telefone || null
       }
     });
   }
