@@ -9,13 +9,10 @@ export class UsersController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const result = await this.usersService.create(createUserDto)
+    const result = await this.usersService.create(createUserDto);
 
     if (result instanceof Error) {
-      throw new HttpException(
-        result.message,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
 
     return result;
@@ -36,10 +33,7 @@ export class UsersController {
     const result = await this.usersService.findByPhone(phone);
 
     if (result instanceof Error) {
-      throw new HttpException(
-        result.message,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
 
     return result;
@@ -47,13 +41,10 @@ export class UsersController {
 
   @Get('by-name/:name')
   async findByName(@Param('name') name: string) {
-    const result = await this.usersService.findByName(name)
+    const result = await this.usersService.findByName(name);
 
     if (result instanceof Error) {
-      throw new HttpException(
-        result.message,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
 
     return result;
@@ -72,13 +63,10 @@ export class UsersController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const result = await this.usersService.update(id, updateUserDto)
+    const result = await this.usersService.update(id, updateUserDto);
 
     if (result instanceof Error) {
-      throw new HttpException(
-        result.message,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
     }
 
     return result;
@@ -87,5 +75,25 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Get('ratings')
+  async getUserRatings() {
+    return this.usersService.getUserRatings();
+  }
+
+  @Get('total-users')
+  async getTotalUsers() {
+    return this.usersService.getTotalUsers();
+  }
+
+  @Get('message-count/:userId')
+  async getUserMessageCount(@Param('userId') userId: string) {
+    return this.usersService.getUserMessageCount(userId);
+  }
+
+  @Get('new-users-per-day')
+  async getNewUsersPerDay() {
+    return this.usersService.getNewUsersPerDay();
   }
 }

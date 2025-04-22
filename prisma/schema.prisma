@@ -13,6 +13,19 @@ datasource db {
 model User {
   id String @id @default(uuid())
   nome String?
-  telefone String? @unique
+  telefone String @unique
   avaliacao Int?
+
+  createdAt DateTime @default(now())
+
+  Log Log[]
+}
+
+model Log {
+  id String @id @default(uuid())
+  message String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
 }
