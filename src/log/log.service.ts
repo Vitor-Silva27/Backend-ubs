@@ -36,12 +36,14 @@ export class LogService {
     });
   }
 
+  // Retorna todos os logs associados a um usuário específico pelo ID do usuário
   async findByUserId(userId: string) {
     return await this.prisma.log.findMany({
       where: { userId },
     });
   }
 
+  // Retorna o número de dias únicos em que um usuário enviou mensagens
   async getDaysUserSentMessages(userId: string) {
     const messages = await this.prisma.log.findMany({
       where: {
@@ -59,6 +61,7 @@ export class LogService {
     return uniqueDays.size;
   }
 
+  // Retorna o número total de usuários únicos que utilizaram(mandaram pelo menos uma mensagem depois de se inscreverem) o chatbot
   async getTotalUsersUsedChatbot() {
     const users = await this.prisma.log.findMany({
       distinct: ['userId'],

@@ -100,6 +100,7 @@ export class UsersService {
     });
   }
 
+  // Retorna as avaliações dos usuários, a quantidade de usuários por avaliação e a média das avaliações
   async getUserRatings() {
     const ratings = await this.prisma.user.groupBy({
       by: ['avaliacao'],
@@ -125,10 +126,12 @@ export class UsersService {
     };
   }
 
+  // Retorna o total de usuários cadastrados
   async getTotalUsers() {
     return this.prisma.user.count();
   }
 
+  // Retorna a quantidade de mensagens enviadas por um usuário específico
   async getUserMessageCount(userId: string) {
     const messages = await this.prisma.log.findMany({
       where: {
@@ -142,6 +145,7 @@ export class UsersService {
     };
   }
 
+  // Retorna a quantidade de novos usuários cadastrados por dia
   async getNewUsersPerDay() {
     const newUsers = await this.prisma.user.groupBy({
       by: ['createdAt'],
