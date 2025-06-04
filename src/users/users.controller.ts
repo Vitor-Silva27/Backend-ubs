@@ -23,9 +23,25 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  @Get('ratings')
+  async getUserRatings() {
+    console.log('Fetching user ratings...');
+    return await this.usersService.getUserRatings();
+  }
+
+  @Get('total-users')
+  async getTotalUsers() {
+    return this.usersService.getTotalUsers();
+  }
+
+  @Get('message-count/:userId')
+  async getUserMessageCount(@Param('userId') userId: string) {
+    return this.usersService.getUserMessageCount(userId);
+  }
+
+  @Get('new-users-per-day')
+  async getNewUsersPerDay() {
+    return this.usersService.getNewUsersPerDay();
   }
 
   @Get('by-phone/:phone')
@@ -61,6 +77,12 @@ export class UsersController {
     return result;
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
+
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const result = await this.usersService.update(id, updateUserDto);
@@ -77,23 +99,4 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  @Get('ratings')
-  async getUserRatings() {
-    return this.usersService.getUserRatings();
-  }
-
-  @Get('total-users')
-  async getTotalUsers() {
-    return this.usersService.getTotalUsers();
-  }
-
-  @Get('message-count/:userId')
-  async getUserMessageCount(@Param('userId') userId: string) {
-    return this.usersService.getUserMessageCount(userId);
-  }
-
-  @Get('new-users-per-day')
-  async getNewUsersPerDay() {
-    return this.usersService.getNewUsersPerDay();
-  }
 }

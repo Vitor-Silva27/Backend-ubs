@@ -17,21 +17,6 @@ export class LogController {
     return this.logService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.logService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLogDto: UpdateLogDto) {
-    return this.logService.update(id, updateLogDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.logService.remove(id);
-  }
-
   @Get('user/:userId')
   findByUserId(@Param('userId') userId: string) {
     return this.logService.findByUserId(userId);
@@ -45,5 +30,20 @@ export class LogController {
   @Get('chatbot/total-users')
   getTotalUsersUsedChatbot() {
     return this.logService.getTotalUsersUsedChatbot();
+  }
+
+    @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.logService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateLogDto: UpdateLogDto) {
+    return this.logService.update(id, updateLogDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.logService.remove(id);
   }
 }

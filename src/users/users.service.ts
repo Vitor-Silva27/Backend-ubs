@@ -8,6 +8,8 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create({nome, telefone}: CreateUserDto) {
+
+    console.log("Creating user with data:", {nome, telefone});
     
     if(telefone){
 
@@ -108,6 +110,13 @@ export class UsersService {
         avaliacao: true,
       },
     });
+
+    if (!ratings || ratings.length === 0) {
+      return {
+        ratings: [],
+        media: "Média: 0.00",
+      };
+    }
 
     const totalRatings = ratings.reduce((sum, rating) => sum + rating._count.avaliacao, 0);
     const averageRating =
