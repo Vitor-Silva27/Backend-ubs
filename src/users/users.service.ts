@@ -140,32 +140,63 @@ export class UsersService {
     return this.prisma.user.count();
   }
 
-  // Retorna a quantidade de mensagens enviadas por um usuário específico
-  async getUserMessageCount(userId: string) {
-    const messages = await this.prisma.log.findMany({
-      where: {
-        userId,
+  // Retorna a quantidade de mensagens enviadas por cada usuário
+  async getMessagesPerUser() {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        nome: true,
+        telefone: true,
+        _count: {
+          select: {
+            Log: true,
+          },
+        },
       },
     });
 
+    return users.map((user) => ({
+      id: user.id,
+      messageCount: user._count.Log,
+    }));
+  }
+
+  async getAverageMessagesPerUser() {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        _count: {
+          select: {
+            Log: true,
+          },
+        },
+      },
+    });
+
+    const averageMessages = users.reduce((sum, user) => sum + user._count.Log, 0) / users.length || 0;
+
     return {
-      userId,
-      messageCount: messages.length,
+      averageMessages,
     };
   }
 
   // Retorna a quantidade de novos usuários cadastrados por dia
   async getNewUsersPerDay() {
-    const newUsers = await this.prisma.user.groupBy({
-      by: ['createdAt'],
-      _count: {
-        createdAt: true,
-      },
-    });
+  const users = await this.prisma.user.findMany({
+    select: {
+      createdAt: true,
+    },
+  });
 
-    return newUsers.map((user) => ({
-      date: user.createdAt.toISOString().split('T')[0],
-      count: user._count.createdAt,
-    }));
-  }
+  const grouped = users.reduce((acc, user) => {
+    const date = user.createdAt.toISOString().split('T')[0];
+    acc[date] = (acc[date] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  return Object.entries(grouped).map(([date, count]) => ({
+    date,
+    count,
+  }));
+}
 }

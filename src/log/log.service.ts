@@ -44,22 +44,30 @@ export class LogService {
   }
 
   // Retorna o número de dias únicos em que um usuário enviou mensagens
-  async getDaysUserSentMessages(userId: string) {
-    const messages = await this.prisma.log.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        createdAt: true,
-      },
-    });
+  async getDaysEachUserSentMessages() {
+  const logs = await this.prisma.log.findMany({
+    select: {
+      userId: true,
+      createdAt: true,
+    },
+  });
 
-    const uniqueDays = new Set(
-      messages.map((message) => message.createdAt.toISOString().split('T')[0])
-    );
+  const userDayMap = new Map<string, Set<string>>();
 
-    return uniqueDays.size;
+  for (const log of logs) {
+    const date = log.createdAt.toISOString().split('T')[0];
+    const userSet = userDayMap.get(log.userId) || new Set<string>();
+    userSet.add(date);
+    userDayMap.set(log.userId, userSet);
   }
+
+  const result = Array.from(userDayMap.entries()).map(([userId, days]) => ({
+    userId,
+    uniqueDaysCount: days.size,
+  }));
+
+  return result;
+}
 
   // Retorna o número total de usuários únicos que utilizaram(mandaram pelo menos uma mensagem depois de se inscreverem) o chatbot
   async getTotalUsersUsedChatbot() {

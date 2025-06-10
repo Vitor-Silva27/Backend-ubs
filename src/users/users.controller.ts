@@ -34,9 +34,14 @@ export class UsersController {
     return this.usersService.getTotalUsers();
   }
 
-  @Get('message-count/:userId')
-  async getUserMessageCount(@Param('userId') userId: string) {
-    return this.usersService.getUserMessageCount(userId);
+  @Get('message-count')
+  async getUserMessageCount() {
+    return this.usersService.getMessagesPerUser();
+  }
+
+  @Get("avg-message-count")
+  async getAverageMessagesPerUser() {
+    return this.usersService.getAverageMessagesPerUser();
   }
 
   @Get('new-users-per-day')

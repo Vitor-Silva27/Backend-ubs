@@ -22,9 +22,9 @@ export class LogController {
     return this.logService.findByUserId(userId);
   }
 
-  @Get('user/:userId/days')
-  getDaysUserSentMessages(@Param('userId') userId: string) {
-    return this.logService.getDaysUserSentMessages(userId);
+  @Get('days')
+  getDaysUserSentMessages() {
+    return this.logService.getDaysEachUserSentMessages();
   }
 
   @Get('chatbot/total-users')
