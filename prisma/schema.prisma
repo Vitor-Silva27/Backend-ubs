@@ -29,3 +29,12 @@ model Log {
 
   createdAt DateTime @default(now())
 }
+
+model Admin {
+  id String @id @default(uuid())
+  username String @unique
+  password String
+  telefone String @unique
+
+  createdAt DateTime @default(now())
+}
